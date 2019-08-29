@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0px;
+      }
+
+      body {
+        background-color: gray;
+      }
+
+      #container {
+        height: 100px;
+        background-color: red;
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 50%;
+        left: 25%;
+        margin-top: 30px;
+      }
+
+      #rope {
+        height: 5px;
+        background-color: green;
+        position: absolute;
+        top: 50%;
+        width: 100%;
+      }
+
+      .person {
+        height: 30px;
+        background-color: blue;
+        width: 30px;
+        z-index: 1;
+      }
+
+      #marker {
+        left: 50%;
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-left: 25px solid transparent;
+        border-right: 25px solid transparent;
+        border-top: 50px solid green;
+        transform: translate(-50%, -100px);
+      }
+    </style>
+    <title>Tug of war</title>
+  </head>
+
+  <body>
+    <div id="game-info">
+      <span id="scores">Left: 0 / right: 0</span>
+      <button onclick="reset()">reset</button>
+    </div>
+    <div id="container">
+      <div id="rope"></div>
+      <div class="person"></div>
+      <div class="person"></div>
+    </div>
+    <div id="marker"></div>
+
+    <script>
+      let left = 25;
+      let leftWin = 0;
+      let rightWin = 0;
+      let win = false;
+
+      function reset() {
+        left = 25;
+        win = false;
+        document.getElementById("container").style.left = left + "%";
+        document.addEventListener("keyup", action);
+      }
+
+      function checkWin() {
+        if (left <= 0) {
+          win = true;
+          leftWin++;
+        } else if (left >= 50) {
+          win = true;
+          rightWin++;
+        }
+        if (win) {
+          document.removeEventListener("keyup", action);
+          document.getElementById(
+            "scores"
+          ).innerText = `Left: ${leftWin} / right: ${rightWin}`;
+        }
+      }
+
+      function action(event) {
+        if (event.keyCode === 32) {
+          left--;
+        }
+        if (event.keyCode === 65) {
+          left++;
+        }
+        document.getElementById("container").style.left = left + "%";
+        checkWin();
+      }
+
+      document.addEventListener("keyup", action);
+    </script>
+  </body>
+</html>
